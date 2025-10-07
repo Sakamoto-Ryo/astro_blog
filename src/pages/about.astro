@@ -1,0 +1,65 @@
+---
+import Layout from '../components/Layout.astro';
+---
+
+<Layout title="关于我">
+  <main class="about-page">
+    <section>
+      <h1>关于我</h1>
+      
+      <div class="about-content">
+        <p>你好！欢迎来到我的博客。</p>
+        <p>我是一名热爱技术和写作的开发者。这个博客是我分享学习心得、技术经验和生活感悟的地方。</p>
+        
+        <h2>我的兴趣</h2>
+        <ul>
+          <li>前端开发</li>
+          <li>用户界面设计</li>
+          <li>学习新技术</li>
+          <li>分享知识</li>
+        </ul>
+        
+        <h2>联系方式</h2>
+        <p>如果你有任何问题或想与我交流，可以通过以下方式联系我：</p>
+        <p>邮箱：example@example.com</p>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .about-page {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  
+  .about-page h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: #2c3e50;
+  }
+  
+  .about-content {
+    line-height: 1.7;
+  }
+  
+  .about-content p {
+    margin-bottom: 1.5rem;
+  }
+  
+  .about-content h2 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+  }
+  
+  .about-content ul {
+    margin-left: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .about-content li {
+    margin-bottom: 0.5rem;
+  }
+</style>

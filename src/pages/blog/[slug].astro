@@ -1,0 +1,120 @@
+---
+import { getEntryBySlug, getCollection } from 'astro:content';
+import Layout from '../../components/Layout.astro';
+
+// 为静态生成提供所有可能的路径
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post: { slug: string }) => ({
+    params: { slug: post.slug },
+  }));
+}
+
+// 从URL获取文章的slug参数
+const { slug } = Astro.params;
+
+// 尝试获取对应的博客文章
+const post = await getEntryBySlug('blog', slug as string);
+
+// 如果文章不存在，返回404页面
+if (!post) {
+  return new Response('Not found', { status: 404 });
+}
+
+// 获取文章的具体内容
+const { Content } = await post.render();
+
+// 提取文章的元数据
+const { title, description, date, tags } = post.data;
+---
+
+<Layout title={title}>
+  <article class="blog-post">
+    <header>
+      <h1 class="blog-title">{title}</h1>
+      <div class="blog-meta">
+        <time datetime={date}>{date}</time>
+        {tags && tags.length > 0 && (
+          <div class="blog-tags">
+            {tags.map((tag: string) => (
+              <span class="blog-tag">{tag}</span>
+            ))}
+          </div>
+        )}
+      </div>
+    </header>
+    
+    {description && (
+      <p class="blog-description">{description}</p>
+    )}
+    
+    <div class="blog-content">
+      <Content />
+    </div>
+  </article>
+</Layout>
+<style>
+  .blog-post {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .blog-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  .blog-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  .blog-tags {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .blog-tag {
+    padding: 0.25rem 0.75rem;
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    font-size: 0.8rem;
+  }
+  
+  .blog-description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    color: #555;
+  }
+  
+  .blog-content {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #333;
+  }
+  
+  .blog-content p {
+    margin-bottom: 1.5rem;
+  }
+  
+  .blog-content h2 {
+    font-size: 1.8rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    color: #222;
+  }
+  
+  .blog-content h3 {
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    color: #333;
+  }
+</style>

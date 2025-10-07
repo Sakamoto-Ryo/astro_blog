@@ -1,0 +1,67 @@
+---
+import Layout from '../components/Layout.astro';
+import { getCollection } from 'astro:content';
+
+// 获取所有博客文章
+const blogPosts = await getCollection('blog');
+// 按日期排序（最新的在前）
+const sortedPosts = blogPosts.sort((a: { data: { date: string | number | Date } }, b: { data: { date: string | number | Date } }) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+---
+
+<Layout title="个人博客">
+  <main>
+    <section class="hero">
+      <h1>欢迎来到我的博客</h1>
+      <p>分享我的学习和思考</p>
+    </section>
+
+    <section class="blog-link">
+      <h2><a href="/my-articles/">我的文章</a></h2>
+    </section>
+  </main>
+</Layout>
+<style>
+  .hero {
+    text-align: center;
+    padding: 2rem 0;
+    background: #f8f9fa;
+  }
+  
+  .hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  .hero p {
+    font-size: 1.2rem;
+    color: #666;
+  }
+  
+  .blog-link {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    text-align: center;
+  }
+  
+  .blog-link h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .blog-link h2 a {
+    text-decoration: none;
+    color: #3498db;
+    transition: color 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    border: 2px solid #3498db;
+    display: inline-block;
+  }
+  
+  .blog-link h2 a:hover {
+    color: white;
+    background-color: #3498db;
+  }
+</style>
