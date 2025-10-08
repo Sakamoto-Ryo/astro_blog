@@ -8,7 +8,7 @@ const blogPosts = await getCollection('blog');
 const sortedPosts = blogPosts.sort((a: { data: { date: string | number | Date } }, b: { data: { date: string | number | Date } }) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 ---
 
-<Layout title="个人博客">
+<Layout title="Sakamoto的个人博客">
   <main>
     <section class="hero">
       <h1>欢迎来到我的博客</h1>
@@ -18,50 +18,57 @@ const sortedPosts = blogPosts.sort((a: { data: { date: string | number | Date } 
     <section class="blog-link">
       <h2><a href="/my-articles/">我的文章</a></h2>
     </section>
+    <section class="project-link">
+      <h2><a href="/my-projects/">我的项目</a></h2>
+    </section>
   </main>
 </Layout>
+
 <style>
+  body {
+    background-image: url('/images/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* 固定背景图，防止滚动时重复 */
+    min-height: 100vh;
+  }
+  
+  /* 重置 main 元素的背景色，避免覆盖 body 背景 */
+  main {
+    background-color: transparent !important;
+  }
+  
+  /* 确保内容区域有适当的背景色，以保证可读性 */
+  /* Hero区域样式 */
   .hero {
-    text-align: center;
-    padding: 2rem 0;
-    background: #f8f9fa;
+    background-color: rgba(255, 255, 255, 0.35); /* 白色背景带透明度 */
+    /* border-radius: 8px; */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* 深色主题下的内容区域背景 */
+  /* 深色主题 - Hero区域 */
+  [data-theme="dark"] .hero {
+    background-color: rgba(26, 26, 26, 0.9); /* 深色背景带透明度 */
   }
   
-  .hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: #333;
-  }
-  
-  .hero p {
-    font-size: 1.2rem;
-    color: #666;
-  }
-  
-  .blog-link {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-    text-align: center;
-  }
-  
-  .blog-link h2 {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .blog-link h2 a {
-    text-decoration: none;
-    color: #3498db;
-    transition: color 0.3s ease;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    border: 2px solid #3498db;
-    display: inline-block;
-  }
-  
-  .blog-link h2 a:hover {
-    color: white;
-    background-color: #3498db;
-  }
+
 </style>
+
+<link rel="stylesheet" href="/css/index.css">
+
+/* 在 <style> 块中添加 */
+.blog-link, .project-link {
+  background-color: transparent; /* 透明背景 */
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+/* 如果需要深色主题的样式 */
+[data-theme="dark"] .blog-link,
+[data-theme="dark"] .project-link {
+  background-color: transparent;
+}

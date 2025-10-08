@@ -1,0 +1,57 @@
+---
+import { getEntry, getCollection } from 'astro:content';
+import Layout from '../../components/Layout.astro';
+
+// 为静态生成提供所有可能的路径
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map(project => ({
+    params: { slug: project.slug },
+  }));
+}
+
+// 从URL获取项目的slug参数
+const { slug } = Astro.params;
+
+// 尝试获取对应的项目
+const project = await getEntry('projects', slug);
+
+// 如果项目不存在，返回404页面
+if (!project) { 
+  return Astro.redirect('/404', 404);
+}
+
+// 获取项目的具体内容
+const { Content } = await project.render();
+
+// 提取项目的元数据
+const { title, description, date, tags } = project.data;
+---
+
+<Layout title={title} >
+  <article class="project-detail">
+    <header>
+      <h1 class="project-title">{title}</h1>
+      <div class="project-meta">
+        <time datetime={date}>{date}</time>
+        {tags && tags.length > 0 && (
+          <div class="project-tags">
+            {tags.map((tag) => (
+              <span class="project-tag">{tag}</span>
+            ))}
+          </div>
+        )}
+      </div>
+    </header>
+    
+    {description && (
+      <p class="project-description">{description}</p>
+    )}
+    
+    <div class="project-content">
+      <Content />
+    </div>
+  </article>
+</Layout>
+
+<link rel="stylesheet" href="/css/project-detail.css">

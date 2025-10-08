@@ -1,0 +1,35 @@
+---
+import Layout from '../components/Layout.astro';
+import { getCollection } from 'astro:content';
+
+// 获取所有项目
+const projects = await getCollection('projects');
+---
+
+<Layout title="我的项目">
+  <main>
+    <section class="page-header">
+      <h1>我的项目</h1>
+      <p>展示我的技术实践和开发成果</p>
+    </section>
+    <section class="project-list">
+        {projects.length === 0 ? (
+          <p>暂无项目</p>
+        ) : (
+          <ul>
+            {projects.map((project) => (
+              <li >
+                <a href={`/projects/${project.slug}/`}>
+                  <h3>{project.data.title || '未命名项目'}</h3>
+                  <p>{project.data.description}</p>
+                  <time>{new Date(project.data.date).toLocaleDateString('zh-CN')}</time>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+    </section>
+  </main>
+</Layout>
+
+<link rel="stylesheet" href="/css/my-projects.css">

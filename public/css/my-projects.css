@@ -1,0 +1,66 @@
+.page-header {
+  text-align: center;
+  padding: 3rem 0;
+  background: var(--secondary-bg);
+}
+
+.page-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.page-header p {
+  font-size: 1.2rem;
+  color: var(--text-color);
+}
+
+.project-list {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  background-color: var(--bg-color);
+}
+
+.project-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.project-list li {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+  transition: transform 0.2s ease;
+}
+
+.project-list li:hover {
+  transform: translateY(-3px);
+}
+
+.project-list li:last-child {
+  border-bottom: none;
+}
+
+.project-list a {
+  text-decoration: none;
+  color: var(--text-color);
+  display: block;
+}
+
+.project-list h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--accent-color);
+}
+
+.project-list p {
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+.project-list time {
+  color: var(--text-color);
+  opacity: 0.8;
+  font-size: 0.9rem;
+}

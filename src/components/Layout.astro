@@ -4,6 +4,7 @@ interface Props {
 }
 
 const { title } = Astro.props;
+const isHomePage = Astro.url.pathname === '/';
 ---
 
 <!DOCTYPE html>
@@ -12,110 +13,30 @@ const { title } = Astro.props;
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title} | 个人博客</title>
-  <style>
-    /* 基础样式重置 */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-        sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      color: #333;
-      line-height: 1.6;
-      background-color: #fff;
-    }
-    
-    /* 导航栏样式 */
-    header {
-      background-color: #2c3e50;
-      color: white;
-      padding: 1rem 0;
-    }
-    
-    nav {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 1rem;
-    }
-    
-    .nav-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .logo {
-      font-size: 1.5rem;
-      font-weight: bold;
-      text-decoration: none;
-      color: white;
-    }
-    
-    .nav-links {
-      display: flex;
-      list-style: none;
-      gap: 1.5rem;
-    }
-    
-    .nav-links a {
-      color: white;
-      text-decoration: none;
-      font-size: 1rem;
-      transition: color 0.3s ease;
-    }
-    
-    .nav-links a:hover {
-      color: #3498db;
-    }
-    
-    /* 主内容区域 */
-    main {
-      min-height: calc(100vh - 120px);
-    }
-    
-    /* 页脚样式 */
-    footer {
-      background-color: #f8f9fa;
-      padding: 2rem 0;
-      text-align: center;
-      color: #666;
-      border-top: 1px solid #eee;
-    }
-    
-    .footer-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 1rem;
-    }
-    
-    /* 响应式设计 */
-    @media (max-width: 768px) {
-      .nav-container {
-        flex-direction: column;
-        gap: 1rem;
-      }
-      
-      .nav-links {
-        gap: 1rem;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/dark-theme.css">
 </head>
 <body>
   <header>
     <nav>
       <div class="nav-container">
-        <a href="/" class="logo">我的博客</a>
+          {!isHomePage && (
+            <button class="back-button" onclick="window.history.back()">
+              <svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 18l-6-6 6-6"/>
+              </svg>
+            </button>
+          )}
+          <a href="/" class="logo">我的博客</a>
         <ul class="nav-links">
           <li><a href="/">首页</a></li>
           <li><a href="/my-articles/">我的文章</a></li>
           <li><a href="/about/">关于</a></li>
+          <li><button id="theme-toggle" class="theme-toggle" aria-label="切换主题">
+            <svg id="theme-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button></li>
         </ul>
       </div>
     </nav>
@@ -125,8 +46,69 @@ const { title } = Astro.props;
   
   <footer>
     <div class="footer-content">
-      <p>&copy; 2025 我的博客. 保留所有权利.</p>
+      <p>&copy; 2025 Sakamoto_Blog. 保留所有权利.</p>
     </div>
   </footer>
+  
+  <script>
+    // 初始化主题
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      // 如果有保存的主题则使用保存的，否则根据系统设置
+      const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', initialTheme === 'dark' ? 'dark' : 'light');
+      updateThemeIcon();
+    }
+    
+    // 切换主题
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcon();
+    }
+    
+    // 更新主题图标
+    function updateThemeIcon() {
+      const themeIcon = document.getElementById('theme-icon');
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      
+      if (themeIcon) {
+        // 使用innerHTML直接设置SVG内容，更高效
+        if (currentTheme === 'dark') {
+          // 太阳图标 - 使用预定义的SVG路径字符串
+          themeIcon.innerHTML = `
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          `;
+        } else {
+          // 月亮图标
+          themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+        }
+      }
+    }
+    
+    // 页面加载时初始化主题
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      
+      // 为主题切换按钮添加事件监听器
+      const themeToggle = document.getElementById('theme-toggle');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+      }
+    });
+  </script>
 </body>
 </html>
